@@ -1,0 +1,2 @@
+model,test_accuracy,macro_f1,macro_precision,macro_recall
+baseline_cnn,0.6194,0.5921,0.623,0.5986
