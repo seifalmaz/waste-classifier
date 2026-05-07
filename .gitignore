@@ -1,0 +1,15 @@
+# Data — too large for GitHub
+data/
+
+# Model checkpoints
+models/*.pth
+models/*.pt
+
+# Jupyter
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+venv/
