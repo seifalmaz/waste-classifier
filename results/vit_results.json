@@ -1,0 +1,50 @@
+{
+    "model": "ViT (from scratch)",
+    "architecture": {
+        "type": "Vision Transformer",
+        "img_size": 224,
+        "patch_size": 16,
+        "embed_dim": 256,
+        "depth": 6,
+        "num_heads": 8,
+        "mlp_dim": 1024,
+        "dropout": 0.1,
+        "num_classes": 5,
+        "total_params": 4987909
+    },
+    "training": {
+        "epochs_ran": 30,
+        "best_val_acc": 0.6931,
+        "best_val_loss": 0.8203,
+        "optimizer": "AdamW",
+        "scheduler": "CosineAnnealingLR",
+        "learning_rate": 0.0001,
+        "batch_size": 32,
+        "patience": 10
+    },
+    "evaluation": {
+        "test_accuracy": 0.7161,
+        "per_class_f1": {
+            "Glass": 0.72,
+            "Metal": 0.6,
+            "Organic": 0.84,
+            "Paper": 0.73,
+            "Plastic": 0.66
+        }
+    },
+    "ensemble": {
+        "models": [
+            "ViT",
+            "ResNet50",
+            "EfficientNetB3"
+        ],
+        "strategy": "soft voting",
+        "test_accuracy": 0.972
+    },
+    "artifacts": {
+        "model_checkpoint": "models/vit_best.pth",
+        "training_curves": "results/vit_training_curves.png",
+        "confusion_matrix": "results/vit_confusion_matrix.png",
+        "attention_rollout": "results/vit_attention_rollout.png"
+    }
+}
