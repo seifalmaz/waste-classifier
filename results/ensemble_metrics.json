@@ -1,0 +1,17 @@
+{
+    "models": [
+        "ViT",
+        "ResNet50",
+        "EfficientNetB3"
+    ],
+    "strategy": "soft voting",
+    "test_accuracy": 0.972,
+    "macro_f1": 0.9708,
+    "macro_precision": 0.9701,
+    "macro_recall": 0.9719,
+    "individual_accuracies": {
+        "vit": 0.7161,
+        "resnet50": 0.96,
+        "efficientnet_b3": 0.96
+    }
+}
