@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoMind AI | Smart Waste Detection</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            EcoMind AI
+        </div>
+        
+        <nav>
+            <div class="nav-item active" onclick="showPage('dashboard')">
+                <span>🏠</span> Dashboard
+            </div>
+            <div class="nav-item" onclick="showPage('realtime')">
+                <span>📹</span> Real-Time Detection
+            </div>
+            <div class="nav-item" onclick="showPage('upload')">
+                <span>📁</span> Upload Analysis
+            </div>
+            <div class="nav-item" onclick="showPage('analytics')">
+                <span>📊</span> Statistics
+            </div>
+        </nav>
+
+        <div style="margin-top: auto; padding: 20px; font-size: 12px; color: var(--text-secondary);">
+            System v2.0 Ready<br>
+            EfficientNet-B3 Stable
+        </div>
+    </div>
+
+    <main class="main-content">
+        <!-- Dashboard Home -->
+        <div id="dashboard" class="page">
+            <h1>Intelligence Overview</h1>
+            
+            <div class="stats-grid">
+                <div class="glass-card">
+                    <h3>Session Detections</h3>
+                    <div class="stat-val" id="total-count">0</div>
+                </div>
+                <div class="glass-card">
+                    <h3>System Health</h3>
+                    <div class="stat-val" style="color: var(--accent-secondary)">Optimal</div>
+                </div>
+                <div class="glass-card">
+                    <h3>Inference Latency</h3>
+                    <div class="stat-val" id="fps-val">30 FPS</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="glass-card">
+                    <h3>Quick Launch</h3>
+                    <div style="display: flex; gap: 20px;">
+                        <button class="btn-primary" onclick="showPage('realtime')">Start Camera</button>
+                        <button class="btn-primary" style="background: rgba(255,255,255,0.1); color: white;" onclick="showPage('upload')">Upload Image</button>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <h3>Active Model</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.6;">
+                        EfficientNet-B3 Fine-tuned on TrashNet dataset. 
+                        Target classes: Plastic, Metal, Glass, Paper, Organic.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Realtime Page -->
+        <div id="realtime" class="page" style="display: none;">
+            <h1>Real-Time Vision</h1>
+            <div class="dashboard-grid">
+                <div class="glass-card">
+                    <div class="video-container">
+                        <img id="stream" class="video-feed" src="">
+                        <div class="overlay-stats">
+                            LIVE FEED | <span id="stream-fps">0</span> FPS
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <h3>Current Detection</h3>
+                    <div id="detection-result" style="font-size: 24px; font-weight: 700; margin: 20px 0;">
+                        Waiting for object...
+                    </div>
+                    <div class="conf-bar-container">
+                        <div id="conf-bar" class="conf-bar-fill"></div>
+                    </div>
+                    <div id="conf-text" style="color: var(--text-secondary); margin-top: 5px;">0% Confidence</div>
+                    
+                    <h3 style="margin-top: 40px;">Detection History</h3>
+                    <div id="history-list" style="max-height: 200px; overflow-y: auto;">
+                        <!-- History items injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Page -->
+        <div id="upload" class="page" style="display: none;">
+            <h1>Analysis Engine</h1>
+            <div class="dashboard-grid">
+                <div class="glass-card">
+                    <div id="drop-zone" class="drop-zone" onclick="document.getElementById('file-input').click()">
+                        <div style="font-size: 48px; margin-bottom: 20px;">☁️</div>
+                        <h3>Drag & Drop or Click to Upload</h3>
+                        <p style="color: var(--text-secondary)">Supports JPG, PNG (Max 5MB)</p>
+                        <input type="file" id="file-input" hidden accept="image/*" onchange="handleFile(this.files[0])">
+                    </div>
+                    <div id="preview-wrapper" class="preview-container">
+                        <img id="upload-preview" class="preview-img">
+                        <button class="btn-remove" onclick="clearUpload(event)">✕ Remove Image</button>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <h3>Detailed Breakdown</h3>
+                    <div id="upload-results" style="margin-top: 20px;">
+                        <p style="color: var(--text-secondary)">Awaiting input analysis...</p>
+                    </div>
+                    <div id="loading-spinner" style="display: none; text-align: center; padding: 20px;">
+                        <div class="stat-val">Analyzing...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Page -->
+        <div id="analytics" class="page" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h1>System Analytics</h1>
+                <div id="session-time" style="color: var(--text-secondary); font-size: 14px;">Session: 00:00:00</div>
+            </div>
+            
+            <!-- KPI Row -->
+            <div class="stats-grid" style="margin-bottom: 25px;">
+                <div class="glass-card">
+                    <h3>Total Scanned</h3>
+                    <div class="stat-val" id="stats-total">0</div>
+                    <p style="font-size: 11px; color: var(--text-secondary); margin-top: 5px;">Since session start</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Top Category</h3>
+                    <div class="stat-val" id="stats-top" style="color: var(--accent-secondary)">None</div>
+                    <p style="font-size: 11px; color: var(--text-secondary); margin-top: 5px;">Most frequent item</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Avg Confidence</h3>
+                    <div class="stat-val" id="stats-conf">0%</div>
+                    <p style="font-size: 11px; color: var(--text-secondary); margin-top: 5px;">Model certainty</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Efficiency</h3>
+                    <div class="stat-val" style="color: #ffcc00">98.2%</div>
+                    <p style="font-size: 11px; color: var(--text-secondary); margin-top: 5px;">Processing uptime</p>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Chart Section -->
+                <div class="glass-card" style="display: flex; flex-direction: column; gap: 20px;">
+                    <div>
+                        <h3 style="margin-bottom: 10px;">Classification Spread</h3>
+                        <div style="height: 200px; position: relative;">
+                            <canvas id="dist-chart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 10px;">Volume per Class</h3>
+                        <div style="height: 180px;">
+                            <canvas id="bar-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 20px;">Recent Activity Log</h3>
+                    <div id="analytics-history" style="max-height: 420px; overflow-y: auto;">
+                        <p style="color: var(--text-secondary); text-align: center; margin-top: 100px;">
+                            Start real-time detection to see events...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

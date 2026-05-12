@@ -1,0 +1,7 @@
+Model,Test Acc %,Macro F1 %,Macro Prec %,Macro Rec %
+Baseline CNN,61.94,59.21,62.3,59.86
+Improved CNN,70.43,70.23,70.95,70.06
+ResNet50,95.81,95.66,95.68,95.69
+EfficientNetB3,96.02,95.94,95.92,96.01
+ViT (scratch),71.61,71.0,,
+Ensemble,97.2,97.08,97.01,97.19
